@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="StepLength">Step length</label>
+    <input type="text" id="StepLength" name="StepLength" value="0.1">
+    <label for="startX">Start X</label>
+    <input type="text" id="startX" name="startX" value="0">
+    <label for="startY">Start Y</label>
+    <input type="text" id="startY" name="startY" value="0">
+    <label for="yPrim">y' = </label>
+    <input type="text" id="yPrim" name="yPrim" value="x + y">
+    <label for="endX">End X</label>
+    <input type="text" id="endX" name="endX" value="1">
+    <button type="button" id ="calculateButton">Calculate</button>
+    <input type="text" id="specialFunc" name="specialFunc" value="baum()">
+    <button onclick="ghgh()">Baumgartner calc</button>
+    <label for="plotType">Plot type</label>
+    <select name="plotType" id="plotType">
+        <option value="lines">Lines</option>
+        <option value="points">Dots</option>
+    </select>
+
+    <h3 id="result">result</h3>
+
+    <canvas id="canvas"></canvas>
+
+    <script src="aprox.js"></script>
+</body>
+</html>
