@@ -6,8 +6,8 @@ calculateButton.addEventListener("click", calc)
 let canvas = document.getElementById("canvas")
 const ctx = canvas.getContext("2d");
 canvas.style = "border:1px solid #000000"
-let height = 500
-let width = 500
+let height = 450
+let width = 450
 canvas.height = height
 canvas.width = width
 document.body.style.overflow = "hidden";
@@ -104,6 +104,51 @@ function baum() {
     drawResults(vsList, 0, 39000, "dots")
 }
 
+function moon(){
+    let r = 3.844*(10**8)
+    let T = 30*24*60*60
+    let M = 5.972*(10**24)
+    let vx = 1
+    let vy = 1000
+    ///(2*Math.PI*r)/T
+    let G = 6.6743*(10**-11)
+    let x = r
+    let y = 0
+    let dt = parseFloat(document.getElementById("StepLength").value)
+    let t = 0
+
+    r = Math.sqrt(x**2 + y**2)
+
+    let ax = G*M*x/(r**3)
+    let ay = G*M*y/(r**3)
+
+    let posList = {}
+
+    while (t <= T) {
+        ax = -G*M*x/(r**3)
+        ay = -G*M*y/(r**3)
+
+        vx += ax*dt
+        vy += ay*dt
+
+        x += vx*dt
+        y += vy*dt
+
+        r = Math.sqrt(x**2 + y**2)
+
+        t += dt
+
+        posList[t]  = Math.sqrt((vx**2)+(vy**2))
+        //posList[x] = y
+        //posList[t] = r
+    }
+
+
+    console.log(Math.max(... Object.values(posList))/Math.min(... Object.values(posList)))
+    document.getElementById("result").innerText = Math.max(... Object.values(posList));
+    drawResults(posList, -1.5*r, 1.5*r, "dots")
+}
+
 function drawResults(resultArray, startX, endX , method) {
     //method = lines or dots
     let padding = 10
@@ -112,8 +157,25 @@ function drawResults(resultArray, startX, endX , method) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
 
-    let scaleX = (width - 2*padding) / (endX - startX)
+    let minX = Math.min(... Object.keys(resultArray))
+    let maxX = Math.max(... Object.keys(resultArray))
+
+    
     let scaleY = (height - 2*padding) / (maxY - minY)
+    let scaleX = (width - 2*padding) / (maxX - minX)
+    
+    if (document.getElementById("scaleType").value == "equal") {
+        let scale = Math.min(scaleX, scaleY)
+        scaleX = scale
+        scaleY = scale
+    }
+
+    //Draw scales
+    ctx.strokeStyle = "black";
+    ctx.font = "15px Arial";
+    ctx.strokeText(("(" + minY.toFixed(2) + "," + minX.toFixed(2) + ")"), padding, height - padding + 10)
+    ctx.strokeText(("(" + maxY.toFixed(2) + "," + maxX.toFixed(2) + ")"), width - padding - 80, padding + 10, 80+padding)
+    document.getElementById("scales").innerText = `Min: (${minX.toFixed(2)}, ${minY.toFixed(2)}), Max: (${maxX.toFixed(2)}, ${maxY.toFixed(2)})`
 
     //Draw axis
     ctx.strokeStyle = "black";
@@ -194,7 +256,7 @@ function drawResults(resultArray, startX, endX , method) {
                 prevDrawY = drawY
             }
 
-            drawX = (x - startX)*scaleX + padding
+            drawX = (x - minX)*scaleX + padding
             drawY = height - ((resultArray[x] - minY)*scaleY + padding)
         }
     }

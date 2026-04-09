@@ -7,7 +7,7 @@
 </head>
 <body>
     <label for="StepLength">Step length</label>
-    <input type="text" id="StepLength" name="StepLength" value="0.1">
+    <input type="text" id="StepLength" name="StepLength" value="7200">
     <label for="startX">Start X</label>
     <input type="text" id="startX" name="startX" value="0">
     <label for="startY">Start Y</label>
@@ -17,17 +17,24 @@
     <label for="endX">End X</label>
     <input type="text" id="endX" name="endX" value="1">
     <button type="button" id ="calculateButton">Calculate</button>
-    <input type="text" id="specialFunc" name="specialFunc" value="baum()">
+    <input type="text" id="specialFunc" name="specialFunc" value="moon()">
     <button onclick="ghgh()">Baumgartner calc</button>
     <label for="plotType">Plot type</label>
     <select name="plotType" id="plotType">
         <option value="lines">Lines</option>
         <option value="points">Dots</option>
     </select>
+    <select name="scaleType" id="scaleType">
+        <option value="equal">Equal</option>
+        <option value="different">Different</option>
+    </select>
 
     <h3 id="result">result</h3>
+    <h3 id="scales" style="margin: 10px 0;">Scales</h3>
 
     <canvas id="canvas"></canvas>
+
+    
 
     <script src="aprox.js"></script>
 </body>
