@@ -1,0 +1,12 @@
+#results{
+    /* width: 70%; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* .resultChild{
+    margin-left: 10vh;
+    margin-top: 10vh;
+
+} */

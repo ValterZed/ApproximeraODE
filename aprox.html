@@ -6,36 +6,43 @@
     <title>Document</title>
 </head>
 <body>
-    <label for="StepLength">Step length</label>
-    <input type="text" id="StepLength" name="StepLength" value="7200">
-    <label for="startX">Start X</label>
-    <input type="text" id="startX" name="startX" value="0">
-    <label for="startY">Start Y</label>
-    <input type="text" id="startY" name="startY" value="0">
-    <label for="yPrim">y' = </label>
-    <input type="text" id="yPrim" name="yPrim" value="x + y">
-    <label for="endX">End X</label>
-    <input type="text" id="endX" name="endX" value="1">
-    <button type="button" id ="calculateButton">Calculate</button>
-    <input type="text" id="specialFunc" name="specialFunc" value="moon()">
-    <button onclick="ghgh()">Baumgartner calc</button>
-    <label for="plotType">Plot type</label>
-    <select name="plotType" id="plotType">
-        <option value="lines">Lines</option>
-        <option value="points">Dots</option>
-    </select>
-    <select name="scaleType" id="scaleType">
-        <option value="equal">Equal</option>
-        <option value="different">Different</option>
-    </select>
+    <div id="settings">
+        <label for="StepLength">Step length</label>
+        <input type="text" id="StepLength" name="StepLength" value="7200">
+        <label for="startX">Start X</label>
+        <input type="text" id="startX" name="startX" value="0">
+        <label for="startY">Start Y</label>
+        <input type="text" id="startY" name="startY" value="0">
+        <label for="yPrim">y' = </label>
+        <input type="text" id="yPrim" name="yPrim" value="x + y">
+        <label for="endX">End X</label>
+        <input type="text" id="endX" name="endX" value="1">
+        <button type="button" id ="calculateButton">Calculate</button>
+        <input type="text" id="specialFunc" name="specialFunc" value="moon()">
+        <button onclick="ghgh()">Custom Calculation</button>
+        <label for="plotType">Plot type</label>
+        <select name="plotType" id="plotType">
+            <option value="dots">Dots</option>
+            <option value="lines">Lines</option>
+        </select>
+        <select name="scaleType" id="scaleType">
+            <option value="equal">Equal</option>
+            <option value="different">Different</option>
+        </select>
+    </div>
+    
 
-    <h3 id="result">result</h3>
-    <h3 id="scales" style="margin: 10px 0;">Scales</h3>
+    <div id = "results">
+        <h3 id="result" class="resultChild">result</h3>
+        <h3 id="scales" class="resultChild" style="margin: 10px 0;">Scales</h3>
+        <h3 id="mousePos" class="resultChild" style="margin: 10px 0;">Value: (0.00, 0.00)</h3>
+    </div>
+    
 
     <canvas id="canvas"></canvas>
 
     
-
+    <link rel="stylesheet" href="aprox.css">
     <script src="aprox.js"></script>
 </body>
 </html>

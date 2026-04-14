@@ -11,12 +11,44 @@ let width = 450
 canvas.height = height
 canvas.width = width
 document.body.style.overflow = "hidden";
+document.getElementById("canvas").addEventListener("mousemove", mouseUpdate)
+
 
 //eval skapa hela funktionen 
+let resultArray = {}
+
+let mouseUpdateScales = {}
+
+function mouseUpdate(event) {
+    if (Object.keys(mouseUpdateScales).length === 0) {
+        return
+    }
+    let rect = canvas.getBoundingClientRect();
+    let xPos = event.clientX - rect.left;
+    let yPos = event.clientY - rect.top;
+    
+    if ((0 <= xPos) && (xPos <= width) && (0 <= yPos) && (yPos <= height)) {
+        let padding = 10
+        let minY = mouseUpdateScales.minY
+        /* let maxY = mouseUpdateScales.maxY */
+        let minX = mouseUpdateScales.minX
+        /* let maxX = Math.max(... Object.keys(resultArray)) */
+        let scaleX =  mouseUpdateScales.scaleX
+        let scaleY =  mouseUpdateScales.scaleY
+
+
+        let x = ((xPos - padding)/scaleX) + minX
+        let y = (((height - yPos) - padding)/scaleY) + minY
+
+        document.getElementById("mousePos").innerText = `Mouse position: (${scientificNotation(x)}, ${scientificNotation(y)})`
+    }
+    
+}
+
 
 
 function calc() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    resultArray = {}
 
     let resultArray = {}
     let stepLength = parseFloat(document.getElementById("StepLength").value);
@@ -32,7 +64,8 @@ function calc() {
     function calculateNextY(x, y, h) {
         let yPrimeValue = ${yPrim}
         return (y+h*yPrimeValue);
-    }`)
+    }
+    `)
 
 
     let startTime = new Date()
@@ -47,7 +80,7 @@ function calc() {
 
     
     console.log(`Total run time: ${endTime.getTime() - startTime.getTime()} ms, Times ran: ${timesRan}, Average time per run: ${(endTime.getTime() - startTime.getTime()) / timesRan} ms`)
-    resultOutput.innerText = y;
+    resultOutput.innerText = `f(${endX}) = ${y}`;
 
     let befDraw = new Date()
     drawResults(resultArray, startX, endX, "dots");
@@ -57,7 +90,17 @@ function calc() {
 }
 
 function ghgh() {
+    resultArray = {}
     eval(document.getElementById("specialFunc").value)
+}
+
+function scientificNotation(num, decimals = 2) {
+    if (num === 0) {
+        return "0";
+    }
+    const exponent = Math.floor(Math.log10(Math.abs(num)));
+    const mantissa = num / Math.pow(10, exponent);
+    return `${mantissa.toFixed(decimals)}*10^${exponent}`;
 }
 
 function baum() {
@@ -109,8 +152,7 @@ function moon(){
     let T = 30*24*60*60
     let M = 5.972*(10**24)
     let vx = 1
-    let vy = 1000
-    ///(2*Math.PI*r)/T
+    let vy = (2*Math.PI*r)/T
     let G = 6.6743*(10**-11)
     let x = r
     let y = 0
@@ -121,8 +163,6 @@ function moon(){
 
     let ax = G*M*x/(r**3)
     let ay = G*M*y/(r**3)
-
-    let posList = {}
 
     while (t <= T) {
         ax = -G*M*x/(r**3)
@@ -138,19 +178,22 @@ function moon(){
 
         t += dt
 
-        posList[t]  = Math.sqrt((vx**2)+(vy**2))
-        //posList[x] = y
+        //posList[t]  = Math.sqrt((vx**2)+(vy**2))
+        resultArray[x] = y
         //posList[t] = r
     }
 
 
-    console.log(Math.max(... Object.values(posList))/Math.min(... Object.values(posList)))
-    document.getElementById("result").innerText = Math.max(... Object.values(posList));
-    drawResults(posList, -1.5*r, 1.5*r, "dots")
+    console.log(Math.max(... Object.values(resultArray))/Math.min(... Object.values(resultArray)))
+    document.getElementById("result").innerText = Math.max(... Object.values(resultArray));
+    drawResults(resultArray, -1.5*r, 1.5*r, document.getElementById("plotType").value)
 }
 
 function drawResults(resultArray, startX, endX , method) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     //method = lines or dots
+
+    //Scales and padding
     let padding = 10
     let minY = Math.min(... Object.values(resultArray))
     let maxY = Math.max(... Object.values(resultArray))
@@ -159,7 +202,6 @@ function drawResults(resultArray, startX, endX , method) {
 
     let minX = Math.min(... Object.keys(resultArray))
     let maxX = Math.max(... Object.keys(resultArray))
-
     
     let scaleY = (height - 2*padding) / (maxY - minY)
     let scaleX = (width - 2*padding) / (maxX - minX)
@@ -170,12 +212,22 @@ function drawResults(resultArray, startX, endX , method) {
         scaleY = scale
     }
 
+    mouseUpdateScales = {
+        scaleX: scaleX,
+        scaleY: scaleY,
+        minX: minX,
+        minY: minY,
+        padding: padding,
+        height: height
+    }
+
+
     //Draw scales
     ctx.strokeStyle = "black";
     ctx.font = "15px Arial";
     ctx.strokeText(("(" + minY.toFixed(2) + "," + minX.toFixed(2) + ")"), padding, height - padding + 10)
     ctx.strokeText(("(" + maxY.toFixed(2) + "," + maxX.toFixed(2) + ")"), width - padding - 80, padding + 10, 80+padding)
-    document.getElementById("scales").innerText = `Min: (${minX.toFixed(2)}, ${minY.toFixed(2)}), Max: (${maxX.toFixed(2)}, ${maxY.toFixed(2)})`
+    document.getElementById("scales").innerText = `Min: (${scientificNotation(minX,1)}, ${scientificNotation(minY,1)}), Max: (${scientificNotation(maxX,1)}, ${scientificNotation(maxY,1)})`
 
     //Draw axis
     ctx.strokeStyle = "black";
@@ -220,17 +272,19 @@ function drawResults(resultArray, startX, endX , method) {
 
     /* ctx.closePath() */
 
+
+    //Draw function
     let drawX = (startX - minY)*scaleX + padding
     let drawY = height - ((startY - minY)*scaleY + padding)
 
-    if (method == "lines") {
+    if (method === "lines") {
         let nextDrawX = 0
         let nextDrawY = 0
         for (let x in resultArray) {
             /* ctx.beginPath(); */
-            nextDrawX = (x - minY)*scaleX + padding
+            nextDrawX = (x - minX)*scaleX + padding
             nextDrawY = height - ((resultArray[x] - minY)*scaleY + padding)
-            if (((drawX-nextDrawX) <= 2) && ((nextDrawY-drawY >= 2) || (drawY - nextDrawY) >=2)) {
+            if (((drawX-nextDrawX) <= 2) || ((nextDrawY-drawY >= 2) || (drawY - nextDrawY) >=2)) {
                 ctx.moveTo(drawX, drawY);
 
                 drawX = nextDrawX
@@ -242,7 +296,7 @@ function drawResults(resultArray, startX, endX , method) {
             }
         }
     }
-    else if (method == "dots") {
+    else if (method === "dots") {
         let prevDrawX = 0
         let prevDrawY = 0
         for (let x in resultArray) {
