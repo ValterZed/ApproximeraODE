@@ -20,26 +20,40 @@
         <button type="button" id ="calculateButton">Calculate</button>
         <input type="text" id="specialFunc" name="specialFunc" value="moon()">
         <button onclick="ghgh()">Custom Calculation</button>
-        <label for="plotType">Plot type</label>
+        <label for="plotType">Plot type:</label>
         <select name="plotType" id="plotType">
             <option value="dots">Dots</option>
             <option value="lines">Lines</option>
         </select>
+        <label for="scaleType">Scale type:</label>
         <select name="scaleType" id="scaleType">
             <option value="equal">Equal</option>
             <option value="different">Different</option>
         </select>
+        <label for="findNearest">Find nearest:</label>
+        <select name="findNearest" id="findNearest">
+            <option value="abs">Absolute closest</option>
+            <option value="x">Closest from X</option>
+            <option value="mousePos">Mouse Position</option>
+        </select>
     </div>
     
 
-    <div id = "results">
-        <h3 id="result" class="resultChild">result</h3>
-        <h3 id="scales" class="resultChild" style="margin: 10px 0;">Scales</h3>
-        <h3 id="mousePos" class="resultChild" style="margin: 10px 0;">Value: (0.00, 0.00)</h3>
+    <div id="canvasContainer">
+        <div id="canvasWrapper">
+            <canvas id="canvas" height="450" width="450"></canvas>
+            <canvas id="canvasYPrim" height="450" width="450"></canvas>
+            <canvas id="canvasTop" height="450" width="450"></canvas>
+        </div>
+        
+        <div id = "results">
+            <h3 id="result" class="resultChild">result</h3>
+            <h3 id="mousePos" class="resultChild" style="margin: 10px 0;">Value: (0.00, 0.00)</h3>
+            <h3 id="scales" class="resultChild" style="margin: 10px 0;">Scales</h3>
+            
+        </div>
     </div>
     
-
-    <canvas id="canvas"></canvas>
 
     
     <link rel="stylesheet" href="aprox.css">

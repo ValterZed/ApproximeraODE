@@ -1,9 +1,37 @@
-#results{
-    /* width: 70%; */
+#canvasContainer{
+    margin-top: 5vh;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
 }
+#results{
+    /* width: 70%; */
+    margin-left: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+}
+
+#wrapper{
+        position:relative;
+        width:300px;
+        height:200px;
+    }
+    #canvasTop,#canvas,#canvasYPrim{
+        position:absolute; top:15vh; left:5vh;
+        border:1px solid green;
+        width:450px;
+        height:450px;
+    }
+    #canvasTop,#canvas,#canvasYPrim{
+        position:absolute; top:15vh; left:5vh;
+        border:1px solid green;
+        width:450px;
+        height:450px;
+    }
+    #canvasTop{
+        border:2px solid black;
+    }
 
 /* .resultChild{
     margin-left: 10vh;
